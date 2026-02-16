@@ -626,6 +626,51 @@
     .waveform span:nth-child(9){height:22px;animation-delay:.12s}
     @keyframes waveBar { 0%{transform:scaleY(0.4)} 100%{transform:scaleY(1)} }
 
+    /* ========================================
+       MUTE TOGGLE
+       ======================================== */
+    .mute-toggle {
+      position: absolute; top: -36px; right: 0;
+      display: flex; align-items: center; gap: 6px;
+      font-family: var(--font); font-size: 12px; font-weight: 500;
+      color: var(--text-body); cursor: pointer;
+      background: var(--card-bg); border: 1px solid var(--border-light);
+      border-radius: 20px; padding: 5px 12px;
+      transition: opacity 0.3s var(--ease), border-color 0.2s;
+      z-index: 20; user-select: none;
+    }
+    .mute-toggle:hover { border-color: rgba(0,0,0,0.15); }
+    .mute-toggle .mute-icon { font-size: 14px; line-height: 1; }
+    .mute-toggle.unmuted { border-color: var(--cta-primary); color: var(--cta-primary); }
+
+    /* ========================================
+       ROCKY MOUNTAIN BACKDROP
+       ======================================== */
+    .mountain-backdrop {
+      position: absolute; left: 0; right: 0; bottom: -120px;
+      width: 100%; height: 500px;
+      z-index: 0; pointer-events: none;
+      opacity: 0.035;
+      will-change: transform;
+    }
+    .hero { position: relative; overflow: visible; z-index: 1; }
+    .hero-content { position: relative; z-index: 2; }
+    .hero-phone-wrapper { position: relative; z-index: 2; }
+
+    /* ========================================
+       iMESSAGE SCROLL FIX
+       ======================================== */
+    .imsg-body {
+      overflow-y: auto; overflow-x: hidden;
+      scroll-behavior: smooth;
+      -ms-overflow-style: none; scrollbar-width: none;
+    }
+    .imsg-body::-webkit-scrollbar { display: none; }
+
+    /* Bubble alignment fix — consistent padding */
+    .imsg-bubble-row.sent { padding-left: 28px; padding-right: 4px; }
+    .imsg-bubble-row.received { padding-right: 28px; padding-left: 4px; }
+
     /* Reveals */
     .reveal { opacity:0; transform:translateY(24px); transition: opacity 0.5s var(--ease), transform 0.5s var(--ease); }
     .reveal.revealed { opacity:1; transform:translateY(0); }
@@ -672,6 +717,15 @@
        SECTION 1: HERO
        ============================================ -->
   <section class="hero" id="hero">
+    <!-- Rocky Mountain Backdrop -->
+    <svg class="mountain-backdrop" id="mountainBackdrop" viewBox="0 0 1440 500" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Far range (background layer) -->
+      <path d="M0 500 L0 340 Q40 320 80 310 L120 280 Q140 265 160 275 L200 250 Q220 235 240 245 L280 220 Q310 195 340 215 L380 200 Q400 185 420 195 L460 180 Q490 160 520 175 L560 190 Q580 200 600 185 L640 170 Q660 155 680 165 L720 150 Q750 130 780 145 L820 155 Q850 165 880 150 L920 160 Q940 170 960 155 L1000 140 Q1020 125 1040 138 L1080 150 Q1110 160 1140 145 L1180 155 Q1200 168 1220 158 L1260 170 Q1290 185 1320 175 L1360 190 Q1390 205 1420 200 L1440 210 L1440 500 Z" fill="#6B8F8A" opacity="0.3"/>
+      <!-- Mid range -->
+      <path d="M0 500 L0 380 Q30 365 60 370 L100 350 Q130 330 160 345 L200 320 Q230 295 260 310 L300 290 Q320 275 340 285 L380 265 Q410 245 440 260 L480 240 Q510 220 540 235 L580 250 Q600 260 620 245 L660 225 Q690 205 720 220 L760 235 Q790 250 820 230 L860 215 Q880 205 900 215 L940 225 Q970 240 1000 220 L1040 205 Q1060 190 1080 200 L1120 210 Q1150 225 1180 210 L1220 220 Q1250 235 1280 225 L1320 240 Q1350 255 1380 245 L1440 260 L1440 500 Z" fill="#4A6B66" opacity="0.4"/>
+      <!-- Near range (foreground) -->
+      <path d="M0 500 L0 420 Q50 400 100 410 L140 390 Q170 375 200 385 L240 370 Q270 355 300 365 L340 350 Q370 335 400 345 L440 330 Q470 310 500 325 L540 340 Q570 355 600 340 L640 320 Q670 305 700 315 L740 330 Q770 345 800 330 L840 310 Q870 295 900 310 L940 325 Q970 340 1000 325 L1040 310 Q1060 300 1080 310 L1120 325 Q1150 340 1180 325 L1220 335 Q1260 350 1300 340 L1340 355 Q1380 370 1420 360 L1440 370 L1440 500 Z" fill="#3A5550" opacity="0.5"/>
+    </svg>
     <div class="hero-content">
       <div class="trust-badge">Built for trades in Western Canada</div>
       <h1>Stop losing jobs to<br>your voicemail</h1>
@@ -896,6 +950,7 @@
           </div>
         </div>
       </div>
+      <div class="mute-toggle" id="heroMuteToggle"><span class="mute-icon">🔇</span> <span class="mute-label">Tap for sound</span></div>
       <button class="replay-btn" id="heroReplayBtn">↻ Replay</button>
     </div>
   </section>
@@ -1010,6 +1065,7 @@
             </div>
           </div>
         </div>
+        <div class="mute-toggle" id="demo1MuteToggle"><span class="mute-icon">🔇</span> <span class="mute-label">Tap for sound</span></div>
         <button class="replay-btn" id="demo1ReplayBtn">↻ Replay</button>
       </div>
     </div>
@@ -1017,9 +1073,65 @@
 
   <script>
     /* ==========================================
+       AUDIO SYSTEM
+       ========================================== */
+    const audioFiles = {
+      ring:    new Audio('assets/audio/ring.mp3'),
+      missed:  new Audio('assets/audio/missed.mp3'),
+      send:    new Audio('assets/audio/send.mp3'),
+      receive: new Audio('assets/audio/receive.mp3'),
+      notify:  new Audio('assets/audio/notify.mp3'),
+    };
+    // Preload all
+    Object.values(audioFiles).forEach(a => { a.preload = 'auto'; a.load(); });
+
+    // Mute state — muted by default (browser autoplay policy)
+    let heroMuted = true;
+    let demo1Muted = true;
+
+    function playSound(name, context) {
+      const muted = context === 'hero' ? heroMuted : demo1Muted;
+      if (muted) return;
+      const audio = audioFiles[name];
+      if (!audio) return;
+      audio.currentTime = 0;
+      audio.play().catch(() => {}); // silently fail if blocked
+    }
+
+    function setupMuteToggle(toggleId, context) {
+      const toggle = document.getElementById(toggleId);
+      toggle.addEventListener('click', () => {
+        if (context === 'hero') {
+          heroMuted = !heroMuted;
+          toggle.querySelector('.mute-icon').textContent = heroMuted ? '🔇' : '🔊';
+          toggle.querySelector('.mute-label').textContent = heroMuted ? 'Tap for sound' : 'Sound on';
+          toggle.classList.toggle('unmuted', !heroMuted);
+        } else {
+          demo1Muted = !demo1Muted;
+          toggle.querySelector('.mute-icon').textContent = demo1Muted ? '🔇' : '🔊';
+          toggle.querySelector('.mute-label').textContent = demo1Muted ? 'Tap for sound' : 'Sound on';
+          toggle.classList.toggle('unmuted', !demo1Muted);
+        }
+      });
+    }
+    setupMuteToggle('heroMuteToggle', 'hero');
+    setupMuteToggle('demo1MuteToggle', 'demo1');
+
+    /* ==========================================
+       AUTO-SCROLL HELPER
+       ========================================== */
+    function scrollMsgBody(bodyEl) {
+      if (!bodyEl) return;
+      requestAnimationFrame(() => {
+        bodyEl.scrollTo({ top: bodyEl.scrollHeight, behavior: 'smooth' });
+      });
+    }
+
+    /* ==========================================
        HERO ANIMATION — ~28 second story
        ========================================== */
     let heroTimeouts = [];
+    const heroMsgBody = document.getElementById('heroMsgBody');
 
     function runHeroAnimation() {
       // Reset everything
@@ -1043,15 +1155,20 @@
       const calEvent = document.getElementById('heroCalEvent');
       calEvent.classList.remove('visible','glow');
 
+      // Reset scroll position
+      if (heroMsgBody) heroMsgBody.scrollTop = 0;
+
       const steps = [
         // === PHASE 1: THE MISSED CALL (4-5s) ===
         { delay: 400, fn: () => {
           document.getElementById('heroCallScreen').classList.add('visible');
+          playSound('ring', 'hero');
         }},
         // Ring for 2.5 seconds...
         { delay: 2500, fn: () => {
-          // Call goes unanswered — show missed call
           document.getElementById('heroCallLabel').textContent = 'Call Ended';
+          audioFiles.ring.pause(); audioFiles.ring.currentTime = 0;
+          playSound('missed', 'hero');
         }},
         { delay: 500, fn: () => {
           document.getElementById('heroMissedBanner').classList.add('visible');
@@ -1078,47 +1195,62 @@
         // Typing indicator
         { delay: 500, fn: () => {
           document.getElementById('heroTyping1').classList.add('visible');
+          scrollMsgBody(heroMsgBody);
         }},
         // AI message 1
         { delay: 1000, fn: () => {
           document.getElementById('heroTyping1').classList.remove('visible');
           document.getElementById('heroTyping1').style.display = 'none';
           document.getElementById('heroMsg1').classList.add('visible');
+          playSound('receive', 'hero');
+          scrollMsgBody(heroMsgBody);
         }},
         { delay: 300, fn: () => {
           document.getElementById('heroReceipt1').classList.add('visible');
+          scrollMsgBody(heroMsgBody);
         }},
         // PAUSE — let viewer read (2s)
         // Sarah replies
         { delay: 2000, fn: () => {
           document.getElementById('heroMsg2').classList.add('visible');
+          playSound('send', 'hero');
+          scrollMsgBody(heroMsgBody);
         }},
         // PAUSE (1.5s)
         { delay: 1500, fn: () => {
           document.getElementById('heroTyping2').classList.add('visible');
+          scrollMsgBody(heroMsgBody);
         }},
         // AI message 2
         { delay: 1000, fn: () => {
           document.getElementById('heroTyping2').classList.remove('visible');
           document.getElementById('heroTyping2').style.display = 'none';
           document.getElementById('heroMsg3').classList.add('visible');
+          playSound('receive', 'hero');
+          scrollMsgBody(heroMsgBody);
         }},
         // PAUSE (2s)
         { delay: 2000, fn: () => {
           document.getElementById('heroMsg4').classList.add('visible');
+          playSound('send', 'hero');
+          scrollMsgBody(heroMsgBody);
         }},
         // AI typing
         { delay: 1200, fn: () => {
           document.getElementById('heroTyping3').classList.add('visible');
+          scrollMsgBody(heroMsgBody);
         }},
         // AI confirmation
         { delay: 1000, fn: () => {
           document.getElementById('heroTyping3').classList.remove('visible');
           document.getElementById('heroTyping3').style.display = 'none';
           document.getElementById('heroMsg5').classList.add('visible');
+          playSound('receive', 'hero');
+          scrollMsgBody(heroMsgBody);
         }},
         { delay: 300, fn: () => {
           document.getElementById('heroReceipt2').classList.add('visible');
+          scrollMsgBody(heroMsgBody);
         }},
 
         // === PHASE 4A: GOOGLE CALENDAR (3s) ===
@@ -1129,6 +1261,7 @@
         // Animate the booking in
         { delay: 600, fn: () => {
           calEvent.classList.add('visible');
+          playSound('notify', 'hero');
         }},
         { delay: 400, fn: () => {
           calEvent.classList.add('glow');
@@ -1150,6 +1283,7 @@
           document.getElementById('heroMikeTyping').classList.remove('visible');
           document.getElementById('heroMikeTyping').style.display = 'none';
           document.getElementById('heroMikeMsg').classList.add('visible');
+          playSound('notify', 'hero');
         }},
         // HOLD on final frame, show replay
         { delay: 2500, fn: () => {
@@ -1201,10 +1335,14 @@
       ];
 
       const steps = [
-        { delay: 300, fn:() => document.getElementById('demo1CallScreen').classList.add('visible') },
+        { delay: 300, fn:() => {
+          document.getElementById('demo1CallScreen').classList.add('visible');
+          playSound('ring', 'demo1');
+        }},
         { delay: 2000, fn:() => {
           document.getElementById('demo1CallScreen').classList.remove('visible');
           document.getElementById('demo1VoiceScreen').classList.add('visible');
+          audioFiles.ring.pause(); audioFiles.ring.currentTime = 0;
         }},
       ];
 
@@ -1230,6 +1368,7 @@
         document.getElementById('demo1Typing').classList.remove('visible');
         document.getElementById('demo1Typing').style.display = 'none';
         document.getElementById('demo1Notify').classList.add('visible');
+        playSound('notify', 'demo1');
       }});
       steps.push({ delay:2000, fn:() => document.getElementById('demo1ReplayBtn').classList.add('visible') });
 
@@ -1259,6 +1398,23 @@
       });
     }, { threshold: 0.15 });
     document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+    /* ==========================================
+       MOUNTAIN PARALLAX
+       ========================================== */
+    const mountainEl = document.getElementById('mountainBackdrop');
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          const scrollY = window.pageYOffset;
+          // Subtle parallax — mountain moves at 15% of scroll speed
+          mountainEl.style.transform = 'translateY(' + (scrollY * 0.15) + 'px)';
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }, { passive: true });
   </script>
 
 </body>
