@@ -347,16 +347,16 @@
     .imsg-timestamp {
       font-size: 10px; color: #8e8e93; text-align: center;
       margin: 4px 0; font-weight: 400;
-      opacity: 0; transition: opacity 0.3s;
+      display: none; opacity: 0; transition: opacity 0.3s;
     }
-    .imsg-timestamp.visible { opacity: 1; }
+    .imsg-timestamp.visible { display: block; opacity: 1; }
 
-    /* iMessage bubbles */
+    /* iMessage bubbles — hidden items collapse to zero height */
     .imsg-bubble-row {
-      display: flex; opacity: 0; transform: translateY(6px);
+      display: none; opacity: 0; transform: translateY(6px);
       transition: opacity 0.3s var(--ease), transform 0.3s var(--ease);
     }
-    .imsg-bubble-row.visible { opacity: 1; transform: translateY(0); }
+    .imsg-bubble-row.visible { display: flex; opacity: 1; transform: translateY(0); }
     .imsg-bubble-row.sent { justify-content: flex-end; }
     .imsg-bubble-row.received { justify-content: flex-start; }
 
@@ -378,19 +378,19 @@
     .imsg-receipt {
       font-size: 10px; color: #8e8e93; text-align: right;
       padding-right: 4px; margin-top: 1px;
-      opacity: 0; transition: opacity 0.3s;
+      display: none; opacity: 0; transition: opacity 0.3s;
     }
-    .imsg-receipt.visible { opacity: 1; }
+    .imsg-receipt.visible { display: block; opacity: 1; }
 
     /* Typing indicator (iMessage style) */
     .imsg-typing {
-      display: inline-flex; gap: 3px;
+      display: none; gap: 3px;
       padding: 10px 14px; background: var(--ios-gray-bubble);
       border-radius: 16px 16px 16px 4px;
       align-self: flex-start;
       opacity: 0; transition: opacity 0.3s;
     }
-    .imsg-typing.visible { opacity: 1; }
+    .imsg-typing.visible { display: inline-flex; opacity: 1; }
     .imsg-typing span {
       width: 6px; height: 6px; background: #8e8e93;
       border-radius: 50%; animation: imsgTyping 1.2s infinite;
@@ -1270,7 +1270,7 @@
       });
       ['heroTyping1','heroTyping2','heroTyping3','heroMikeTyping'].forEach(id => {
         const el = document.getElementById(id);
-        el.classList.remove('visible'); el.style.display = '';
+        el.classList.remove('visible');
       });
       const calEvent = document.getElementById('heroCalEvent');
       calEvent.classList.remove('visible','glow');
@@ -1316,7 +1316,6 @@
         }},
         { delay: 1000, fn: () => {
           document.getElementById('heroTyping1').classList.remove('visible');
-          document.getElementById('heroTyping1').style.display = 'none';
           document.getElementById('heroMsg1').classList.add('visible');
           playSound('receive', 'hero');
           scrollMsgBody(heroMsgBody);
@@ -1336,7 +1335,6 @@
         }},
         { delay: 1000, fn: () => {
           document.getElementById('heroTyping2').classList.remove('visible');
-          document.getElementById('heroTyping2').style.display = 'none';
           document.getElementById('heroMsg3').classList.add('visible');
           playSound('receive', 'hero');
           scrollMsgBody(heroMsgBody);
@@ -1352,7 +1350,6 @@
         }},
         { delay: 1000, fn: () => {
           document.getElementById('heroTyping3').classList.remove('visible');
-          document.getElementById('heroTyping3').style.display = 'none';
           document.getElementById('heroMsg5').classList.add('visible');
           playSound('receive', 'hero');
           scrollMsgBody(heroMsgBody);
@@ -1388,7 +1385,6 @@
         }},
         { delay: 800, fn: () => {
           document.getElementById('heroMikeTyping').classList.remove('visible');
-          document.getElementById('heroMikeTyping').style.display = 'none';
           document.getElementById('heroMikeMsg').classList.add('visible');
           playSound('notify', 'hero');
         }},
@@ -1428,7 +1424,6 @@
       document.getElementById('demo1VoiceText').classList.remove('visible');
       document.getElementById('demo1VoiceText').textContent = '';
       document.getElementById('demo1Typing').classList.remove('visible');
-      document.getElementById('demo1Typing').style.display = '';
       document.getElementById('demo1Notify').classList.remove('visible');
       document.getElementById('demo1ReplayBtn').classList.remove('visible');
       document.getElementById('demo1Speaker').textContent = 'AI is speaking...';
@@ -1461,7 +1456,11 @@
             const txt = document.getElementById('demo1VoiceText');
             spk.textContent = line.who==='caller' ? 'Caller is speaking...' : 'AI is speaking...';
             txt.classList.remove('visible');
-            setTimeout(() => { txt.textContent = line.text; txt.classList.add('visible'); }, 200);
+            setTimeout(() => {
+              txt.textContent = line.text;
+              txt.classList.add('visible');
+              playSound(line.who==='caller' ? 'send' : 'receive', 'demo1');
+            }, 200);
           }
         });
       });
@@ -1473,7 +1472,6 @@
       steps.push({ delay:400, fn:() => document.getElementById('demo1Typing').classList.add('visible') });
       steps.push({ delay:800, fn:() => {
         document.getElementById('demo1Typing').classList.remove('visible');
-        document.getElementById('demo1Typing').style.display = 'none';
         document.getElementById('demo1Notify').classList.add('visible');
         playSound('notify', 'demo1');
       }});
